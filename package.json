@@ -1,0 +1,45 @@
+{
+    "name": "micro-diff-patch",
+    "version": "1.0.0",
+    "description": "A small, fast, zero-dependency library for deep object diffing and patching",
+    "type": "module",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "default": "./dist/index.js"
+        }
+    },
+    "files": [
+        "dist"
+    ],
+    "sideEffects": false,
+    "scripts": {
+        "build": "tsc",
+        "lint": "eslint .",
+        "format": "prettier --write .",
+        "test": "node --import tsx --test tests/*.ts",
+        "prepublishOnly": "npm run build"
+    },
+    "keywords": [
+        "diff",
+        "patch"
+    ],
+    "author": "prim",
+    "license": "MIT",
+    "devDependencies": {
+        "@eslint/js": "^10.0.1",
+        "eslint": "^10.0.2",
+        "jiti": "^2.6.1",
+        "prettier": "^3.8.1",
+        "tsx": "^4.21.0",
+        "typescript": "^5.9.3",
+        "typescript-eslint": "^8.56.1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/z3lx/micro-diff-patch"
+    }
+}
