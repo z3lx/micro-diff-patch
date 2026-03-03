@@ -1,6 +1,6 @@
 import { describe, test } from "node:test";
 import assert from "node:assert/strict";
-import { type Diff, diff, patch } from "../src/index.js";
+import { type Diff, diff, DIFF_TYPE, patch } from "../src/index.js";
 
 describe("basic patches", () => {
     test("create property", () => {
@@ -8,7 +8,7 @@ describe("basic patches", () => {
         const diffs = [
             {
                 path: ["test2"],
-                type: "CREATE",
+                type: DIFF_TYPE.CREATE,
                 value: "test",
             },
         ] as Diff[];
@@ -22,7 +22,7 @@ describe("basic patches", () => {
         const diffs = [
             {
                 path: ["test"],
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 value: false,
                 oldValue: true,
             },
@@ -37,7 +37,7 @@ describe("basic patches", () => {
         const diffs = [
             {
                 path: ["test"],
-                type: "REMOVE",
+                type: DIFF_TYPE.REMOVE,
                 oldValue: true,
             },
         ] as Diff[];
@@ -59,7 +59,7 @@ describe("basic patches", () => {
         const diffs = [
             {
                 path: ["bananas", "stock", "stockholm"],
-                type: "REMOVE",
+                type: DIFF_TYPE.REMOVE,
                 oldValue: false,
             },
         ] as Diff[];
@@ -80,7 +80,7 @@ describe("basic patches", () => {
         const diffs = [
             {
                 path: ["a", "c"],
-                type: "CREATE",
+                type: DIFF_TYPE.CREATE,
                 value: 2,
             },
         ] as Diff[];
@@ -94,7 +94,7 @@ describe("basic patches", () => {
         const diffs = [
             {
                 path: ["a", "b"],
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 value: 2,
                 oldValue: 1,
             },
@@ -109,18 +109,18 @@ describe("basic patches", () => {
         const diffs = [
             {
                 path: ["b"],
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 value: 5,
                 oldValue: 2,
             },
             {
                 path: ["c"],
-                type: "REMOVE",
+                type: DIFF_TYPE.REMOVE,
                 oldValue: 3,
             },
             {
                 path: ["d"],
-                type: "CREATE",
+                type: DIFF_TYPE.CREATE,
                 value: 4,
             },
         ] as Diff[];
@@ -136,7 +136,7 @@ describe("array patches", () => {
         const diffs = [
             {
                 path: [1],
-                type: "REMOVE",
+                type: DIFF_TYPE.REMOVE,
                 oldValue: "two",
             },
         ] as Diff[];
@@ -150,7 +150,7 @@ describe("array patches", () => {
         const diffs = [
             {
                 path: [1, 2],
-                type: "CREATE",
+                type: DIFF_TYPE.CREATE,
                 value: "two-three",
             },
         ] as Diff[];
@@ -164,7 +164,7 @@ describe("array patches", () => {
         const diffs = [
             {
                 path: ["main", 1],
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 value: "three",
                 oldValue: "two",
             },
@@ -182,7 +182,7 @@ describe("array patches", () => {
         const diffs = [
             {
                 path: ["bananas", "items", 1],
-                type: "REMOVE",
+                type: DIFF_TYPE.REMOVE,
                 oldValue: "two",
             },
         ] as Diff[];
@@ -199,7 +199,7 @@ describe("array patches", () => {
         const diffs = [
             {
                 path: [2],
-                type: "CREATE",
+                type: DIFF_TYPE.CREATE,
                 value: "three",
             },
         ] as Diff[];
@@ -213,7 +213,7 @@ describe("array patches", () => {
         const diffs = [
             {
                 path: [0],
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 value: "zero",
                 oldValue: "one",
             },
@@ -230,7 +230,7 @@ describe("error patches", () => {
         const diffs = [
             {
                 path: [3],
-                type: "REMOVE",
+                type: DIFF_TYPE.REMOVE,
                 oldValue: "x",
             },
         ] as Diff[];

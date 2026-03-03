@@ -1,6 +1,6 @@
 import { describe, test } from "node:test";
 import assert from "node:assert/strict";
-import { type Diff, diff } from "../src/index.js";
+import { type Diff, DIFF_TYPE, diff } from "../src/index.js";
 
 describe("basic diffs", () => {
     test("identical objects", () => {
@@ -16,7 +16,7 @@ describe("basic diffs", () => {
         const newObj = { test: true, test2: true };
         const expectedDiffs = [
             {
-                type: "CREATE",
+                type: DIFF_TYPE.CREATE,
                 path: ["test2"],
                 value: true,
             },
@@ -30,7 +30,7 @@ describe("basic diffs", () => {
         const newObj = { test: false };
         const expectedDiffs = [
             {
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 path: ["test"],
                 value: false,
                 oldValue: true,
@@ -45,7 +45,7 @@ describe("basic diffs", () => {
         const newObj = { test: true };
         const expectedDiffs = [
             {
-                type: "REMOVE",
+                type: DIFF_TYPE.REMOVE,
                 path: ["test2"],
                 oldValue: true,
             },
@@ -59,7 +59,7 @@ describe("basic diffs", () => {
         const newObj = { object: null };
         const expectedDiffs = [
             {
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 path: ["object"],
                 value: null,
                 oldValue: { test: true },
@@ -74,7 +74,7 @@ describe("basic diffs", () => {
         const newObj = { object: "string" };
         const expectedDiffs = [
             {
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 path: ["object"],
                 value: "string",
                 oldValue: { test: true },
@@ -89,7 +89,7 @@ describe("basic diffs", () => {
         const newObj = { a: { b: 2 } };
         const expectedDiffs = [
             {
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 path: ["a", "b"],
                 value: 2,
                 oldValue: 1,
@@ -104,7 +104,7 @@ describe("basic diffs", () => {
         const newObj = { object: { test: true } };
         const expectedDiffs = [
             {
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 path: ["object"],
                 value: { test: true },
                 oldValue: null,
@@ -119,18 +119,18 @@ describe("basic diffs", () => {
         const newObj = { a: 1, b: 5, d: 4 };
         const expectedDiffs = [
             {
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 path: ["b"],
                 value: 5,
                 oldValue: 2,
             },
             {
-                type: "REMOVE",
+                type: DIFF_TYPE.REMOVE,
                 path: ["c"],
                 oldValue: 3,
             },
             {
-                type: "CREATE",
+                type: DIFF_TYPE.CREATE,
                 path: ["d"],
                 value: 4,
             },
@@ -153,7 +153,7 @@ describe("basic diffs", () => {
         newObj.test = true;
         const expectedDiffs = [
             {
-                type: "CREATE",
+                type: DIFF_TYPE.CREATE,
                 path: ["test"],
                 value: true,
             },
@@ -169,7 +169,7 @@ describe("arrays diffs", () => {
         const newObj = ["test"];
         const expectedDiffs = [
             {
-                type: "REMOVE",
+                type: DIFF_TYPE.REMOVE,
                 path: [1],
                 oldValue: "testing",
             },
@@ -183,7 +183,7 @@ describe("arrays diffs", () => {
         const newObj = ["test", ["test", "test2"]];
         const expectedDiffs = [
             {
-                type: "CREATE",
+                type: DIFF_TYPE.CREATE,
                 path: [1, 1],
                 value: "test2",
             },
@@ -197,7 +197,7 @@ describe("arrays diffs", () => {
         const newObj = { test: ["test", { test2: false }] };
         const expectedDiffs = [
             {
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 path: ["test", 1, "test2"],
                 value: false,
                 oldValue: true,
@@ -212,7 +212,7 @@ describe("arrays diffs", () => {
         const newObj = { data: { val: "test" } };
         const expectedDiffs = [
             {
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 path: ["data"],
                 value: { val: "test" },
                 oldValue: [],
@@ -227,7 +227,7 @@ describe("arrays diffs", () => {
         const newObj = { data: [] };
         const expectedDiffs = [
             {
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 path: ["data"],
                 value: [],
                 oldValue: { val: "test" },
@@ -252,7 +252,7 @@ describe("primitive diffs", () => {
         const newObj = { string: "hello" };
         const expectedDiffs = [
             {
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 path: ["string"],
                 value: "hello",
                 oldValue: "hi",
@@ -275,7 +275,7 @@ describe("primitive diffs", () => {
         const newObj = { number: 2 };
         const expectedDiffs = [
             {
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 path: ["number"],
                 value: 2,
                 oldValue: 1,
@@ -310,7 +310,7 @@ describe("cyclic diffs", () => {
         const newObj = { a: 1, b: { c: 3 } };
         const expectedDiffs = [
             {
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 path: ["b", "c"],
                 value: 3,
                 oldValue: 2,
@@ -335,7 +335,7 @@ describe("date diffs", () => {
         const newObj = { date: new Date(2) };
         const expectedDiffs = [
             {
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 path: ["date"],
                 value: new Date(2),
                 oldValue: new Date(1),
@@ -350,7 +350,7 @@ describe("date diffs", () => {
         const newObj = { date: "not date" };
         const expectedDiffs = [
             {
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 path: ["date"],
                 value: "not date",
                 oldValue: new Date(1),
@@ -364,7 +364,7 @@ describe("date diffs", () => {
         const newObj = { date: new Date(1) };
         const expectedDiffs = [
             {
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 path: ["date"],
                 value: new Date(1),
                 oldValue: "not date",
@@ -378,7 +378,7 @@ describe("date diffs", () => {
         const newObj = { date: { time: 1 } };
         const expectedDiffs = [
             {
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 path: ["date"],
                 value: { time: 1 },
                 oldValue: new Date(1),
@@ -393,7 +393,7 @@ describe("date diffs", () => {
         const newObj = { date: new Date(1) };
         const expectedDiffs = [
             {
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 path: ["date"],
                 value: new Date(1),
                 oldValue: { time: 1 },
@@ -418,7 +418,7 @@ describe("regex diffs", () => {
         const newObj = { regex: /b/ };
         const expectedDiffs = [
             {
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 path: ["regex"],
                 value: /b/,
                 oldValue: /a/,
@@ -433,7 +433,7 @@ describe("regex diffs", () => {
         const newObj = { regex: { pattern: "a" } };
         const expectedDiffs = [
             {
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 path: ["regex"],
                 value: { pattern: "a" },
                 oldValue: /a/,
@@ -448,7 +448,7 @@ describe("regex diffs", () => {
         const newObj = { regex: /a/ };
         const expectedDiffs = [
             {
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 path: ["regex"],
                 value: /a/,
                 oldValue: { pattern: "a" },
@@ -473,7 +473,7 @@ describe("NaN diffs", () => {
         const newObj = { testNaN: NaN };
         const expectedDiffs = [
             {
-                type: "CREATE",
+                type: DIFF_TYPE.CREATE,
                 path: ["testNaN"],
                 value: NaN,
             },
@@ -487,7 +487,7 @@ describe("NaN diffs", () => {
         const newObj = { testNaN: 0 };
         const expectedDiffs = [
             {
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 path: ["testNaN"],
                 value: 0,
                 oldValue: NaN,
@@ -502,7 +502,7 @@ describe("NaN diffs", () => {
         const newObj = {};
         const expectedDiffs = [
             {
-                type: "REMOVE",
+                type: DIFF_TYPE.REMOVE,
                 path: ["testNaN"],
                 oldValue: NaN,
             },
@@ -524,7 +524,7 @@ describe("NaN diffs", () => {
         const newObj = [NaN];
         const expectedDiffs = [
             {
-                type: "CREATE",
+                type: DIFF_TYPE.CREATE,
                 path: [0],
                 value: NaN,
             },
@@ -538,7 +538,7 @@ describe("NaN diffs", () => {
         const newObj = [0];
         const expectedDiffs = [
             {
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 path: [0],
                 value: 0,
                 oldValue: NaN,
@@ -553,7 +553,7 @@ describe("NaN diffs", () => {
         const newObj = [] as unknown[];
         const expectedDiffs = [
             {
-                type: "REMOVE",
+                type: DIFF_TYPE.REMOVE,
                 path: [0],
                 oldValue: NaN,
             },

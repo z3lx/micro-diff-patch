@@ -1,4 +1,5 @@
 import type { Diff, DiffOptions, DiffTarget } from "./types.js";
+import { DIFF_TYPE } from "./types.js";
 
 const RICH_TYPES: ReadonlySet<string> = new Set([
     "Date",
@@ -38,7 +39,7 @@ function diffRecursive(
         const oldObjValue = oldObjRecord[key];
         if (!(key in newObjRecord)) {
             diffs.push({
-                type: "REMOVE",
+                type: DIFF_TYPE.REMOVE,
                 path: [path],
                 oldValue: oldObjValue,
             });
@@ -76,7 +77,7 @@ function diffRecursive(
                     : Number(oldObjValue) === Number(newObjValue);
                 if (!coercedEqual) {
                     diffs.push({
-                        type: "CHANGE",
+                        type: DIFF_TYPE.CHANGE,
                         path: [path],
                         value: newObjValue,
                         oldValue: oldObjValue,
@@ -89,7 +90,7 @@ function diffRecursive(
         ) {
             // Primitive or incompatible types changed
             diffs.push({
-                type: "CHANGE",
+                type: DIFF_TYPE.CHANGE,
                 path: [path],
                 value: newObjValue,
                 oldValue: oldObjValue,
@@ -101,7 +102,7 @@ function diffRecursive(
     for (const key in newObjRecord) {
         if (!(key in oldObjRecord)) {
             diffs.push({
-                type: "CREATE",
+                type: DIFF_TYPE.CREATE,
                 path: [isNewObjArray ? +key : key],
                 value: newObjRecord[key],
             });

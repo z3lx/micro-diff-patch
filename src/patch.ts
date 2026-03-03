@@ -1,4 +1,5 @@
 import type { Diff, DiffTarget } from "./types.js";
+import { DIFF_TYPE } from "./types.js";
 
 export function patch(obj: DiffTarget, diffs: Diff[]): void {
     for (const diff of diffs) {
@@ -14,16 +15,19 @@ export function patch(obj: DiffTarget, diffs: Diff[]): void {
 
         const lastKey = diff.path.at(-1)!;
         const parentRecord = parent as Record<string, unknown>;
-        if (parentRecord[lastKey] === undefined && diff.type !== "CREATE") {
+        if (
+            parentRecord[lastKey] === undefined &&
+            diff.type !== DIFF_TYPE.CREATE
+        ) {
             throw new Error(`Path ${String(diff.path)} doesn't exist`);
         }
 
         switch (diff.type) {
-            case "CREATE":
-            case "CHANGE":
+            case DIFF_TYPE.CREATE:
+            case DIFF_TYPE.CHANGE:
                 parentRecord[lastKey] = diff.value;
                 break;
-            case "REMOVE":
+            case DIFF_TYPE.REMOVE:
                 if (Array.isArray(parent)) {
                     parent.splice(lastKey as number, 1);
                 } else {
