@@ -32,7 +32,7 @@ const changes = diff(original, updated);
 // ]
 
 patch(original, changes);
-// original is now { name: "Alice", age: 20, role: "admin" }
+// original is now { name: "Alice", age: 21, role: "admin" }
 ```
 
 Works with nested objects and arrays:
