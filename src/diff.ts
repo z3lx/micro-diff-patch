@@ -40,18 +40,24 @@ function diffRecursive(
             diffs.push({
                 type: "REMOVE",
                 path: [path],
-                oldValue: oldObjValue
+                oldValue: oldObjValue,
             });
             continue;
         }
 
         const newObjValue = newObjRecord[key];
-        if (typeof oldObjValue === "object" && oldObjValue !== null &&
-            typeof newObjValue === "object" && newObjValue !== null &&
-            Array.isArray(oldObjValue) === Array.isArray(newObjValue)) {
+        if (
+            typeof oldObjValue === "object" &&
+            oldObjValue !== null &&
+            typeof newObjValue === "object" &&
+            newObjValue !== null &&
+            Array.isArray(oldObjValue) === Array.isArray(newObjValue)
+        ) {
             // Non-null objects of the same kind
-            if (!isRichType(oldObjValue) &&
-                (!options.detectCycles || !stack.includes(oldObjValue))) {
+            if (
+                !isRichType(oldObjValue) &&
+                (!options.detectCycles || !stack.includes(oldObjValue))
+            ) {
                 // Plain object or array
                 const nestedDiffs = diffRecursive(
                     oldObjValue as DiffTarget,
@@ -77,8 +83,10 @@ function diffRecursive(
                     });
                 }
             }
-        } else if (oldObjValue !== newObjValue &&
-            !(Number.isNaN(oldObjValue) && Number.isNaN(newObjValue))) {
+        } else if (
+            oldObjValue !== newObjValue &&
+            !(Number.isNaN(oldObjValue) && Number.isNaN(newObjValue))
+        ) {
             // Primitive or incompatible types changed
             diffs.push({
                 type: "CHANGE",
