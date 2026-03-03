@@ -17,7 +17,7 @@
     ],
     "sideEffects": false,
     "scripts": {
-        "build": "tsc",
+        "build": "tsc -p tsconfig.build.json",
         "lint": "eslint .",
         "format": "prettier --write .",
         "test": "node --import tsx --test tests/*.ts",
@@ -31,6 +31,7 @@
     "license": "MIT",
     "devDependencies": {
         "@eslint/js": "^10.0.1",
+        "@types/node": "^25.3.3",
         "eslint": "^10.0.2",
         "jiti": "^2.6.1",
         "prettier": "^3.8.1",
