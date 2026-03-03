@@ -55,8 +55,8 @@ function diffRecursive(
         ) {
             // Non-null objects of the same kind
             if (
-                !isRichType(oldObjValue) &&
-                (!options.detectCycles || !stack.includes(oldObjValue))
+                !(isRichType(oldObjValue) || isRichType(newObjValue)) &&
+                !(options.detectCycles && stack.includes(oldObjValue))
             ) {
                 // Plain object or array
                 const nestedDiffs = diffRecursive(
