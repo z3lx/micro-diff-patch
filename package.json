@@ -1,6 +1,6 @@
 {
     "name": "micro-diff-patch",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "A small, fast, zero-dependency library for deep object diffing and patching",
     "type": "module",
     "main": "./dist/index.js",
