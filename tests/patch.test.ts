@@ -222,6 +222,64 @@ describe("array patches", () => {
         patch(obj, diffs);
         assert.deepStrictEqual(obj, expectedObj);
     });
+
+    test("multiple removes in top level array", () => {
+        const obj = ["zero", "one", "two", "three"];
+        const diffs = [
+            {
+                path: [1],
+                type: DIFF_TYPE.REMOVE,
+                oldValue: "one",
+            },
+            {
+                path: [3],
+                type: DIFF_TYPE.REMOVE,
+                oldValue: "three",
+            },
+        ] as Diff[];
+        const expectedObj = ["zero", "two"];
+        patch(obj, diffs);
+        assert.deepStrictEqual(obj, expectedObj);
+    });
+
+    test("multiple removes in nested array", () => {
+        const obj = {
+            players: [
+                {
+                    availablePaths: [
+                        { x: 0, y: 0 },
+                        { x: 1, y: 0 },
+                        { x: 2, y: 0 },
+                        { x: 3, y: 0 },
+                    ],
+                },
+            ],
+        };
+        const diffs = [
+            {
+                path: ["players", 0, "availablePaths", 1],
+                type: DIFF_TYPE.REMOVE,
+                oldValue: { x: 1, y: 0 },
+            },
+            {
+                path: ["players", 0, "availablePaths", 3],
+                type: DIFF_TYPE.REMOVE,
+                oldValue: { x: 3, y: 0 },
+            },
+        ] as Diff[];
+        const expectedObj = {
+            players: [
+                {
+                    availablePaths: [
+                        { x: 0, y: 0 },
+                        { x: 2, y: 0 },
+                    ],
+                },
+            ],
+        };
+        patch(obj, diffs);
+        assert.deepStrictEqual(obj, expectedObj);
+    });
 });
 
 describe("error patches", () => {
